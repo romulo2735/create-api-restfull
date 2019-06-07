@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('product', 'ProductController')->only('index', 'show', 'store', 'update', 'destroy');
+Route::resource('vehicle', 'VehicleController')->only('index', 'show', 'store', 'update', 'destroy');
+Route::resource('job', 'JobController')->only('index', 'show', 'store', 'update', 'destroy');
+Route::resource('company', 'CompanyController')->only('index', 'show', 'store', 'update', 'destroy');
