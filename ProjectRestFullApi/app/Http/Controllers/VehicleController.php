@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class VehicleController extends Controller
 {
+    private $vehicle;
+
+    /**
+     * @param Vehicle $vehicle
+     */
+    public function __construct(Vehicle $vehicle)
+    {
+        $this->vehicle = $vehicle;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,17 +26,9 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $vehicles = $this->vehicle->paginate();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($vehicles, Response::HTTP_OK);
     }
 
     /**
@@ -33,9 +37,18 @@ class VehicleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(VehicleRequest $request)
     {
-        //
+        $data = $request->all();
+
+        $vehicle = $this->vehicle->create($data);
+
+        if ($vehicle) {
+            return response()->json($vehicle, Response::HTTP_OK);
+        } else {
+            return response()->json('Não foi possivel cadastrar o Carro', Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
     /**
@@ -44,20 +57,15 @@ class VehicleController extends Controller
      * @param  \App\Models\Vehicle  $vehicle
      * @return \Illuminate\Http\Response
      */
-    public function show(Vehicle $vehicle)
+    public function show($id)
     {
-        //
-    }
+        $vehicle = $this->vehicle->find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Vehicle  $vehicle
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Vehicle $vehicle)
-    {
-        //
+        if (!$vehicle) {
+            return response()->json('O Veiculo não existe', Response::HTTP_NOT_FOUND);
+        } else {
+            return response()->json($vehicle, Response::HTTP_OK);
+        }
     }
 
     /**
@@ -67,9 +75,17 @@ class VehicleController extends Controller
      * @param  \App\Models\Vehicle  $vehicle
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(VehicleRequest $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $vehicle = $this->vehicle->find($id);
+        if (!$vehicle) {
+            return respose()->json('Veiculo não encontrada', Response::HTTP_NOT_FOUND);
+        }
+        $vehicle->update($data);
+
+        return response()->json($vehicle, Response::HTTP_CREATED);
     }
 
     /**
@@ -78,8 +94,15 @@ class VehicleController extends Controller
      * @param  \App\Models\Vehicle  $vehicle
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Vehicle $vehicle)
+    public function destroy($id)
     {
-        //
+        $vehicle = $this->vehicle->find($id);
+
+        if (!$vehicle) {
+            return response()->json('Veiculo não encontrado', Response::HTTP_NOT_FOUND);
+        }
+        $vehicle->delete();
+
+        return response()->json('Veiculo deletedo com suceso', Response::HTTP_OK);
     }
 }
