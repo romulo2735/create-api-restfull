@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = $this->product->all();
+        $products = $this->product->paginate();
 
         return response()->json($products, Response::HTTP_OK);
     }
@@ -73,7 +73,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function update(ProductRequest $request, $id)
