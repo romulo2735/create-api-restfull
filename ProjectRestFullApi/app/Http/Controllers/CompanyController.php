@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompanyController extends Controller
 {
+
+    private $company;
+
+    public function __construct(Company $company)
+    {
+        $this->company = $company;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $jobs = $this->company->paginate();
+
+        return response()->json($jobs, Response::HTTP_OK);
     }
 
     /**
