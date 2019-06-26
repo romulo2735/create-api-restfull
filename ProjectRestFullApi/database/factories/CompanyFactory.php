@@ -7,7 +7,7 @@ use App\Models\Company;
 
 $factory->define(Company::class, function (Faker $faker) {
     return [
-        'fantasyName' => $faker->companyEmail,
+        'fantasyName' => $faker->company,
         'email' => $faker->email,
         'cnpj' => 79846521325468,
     ];
