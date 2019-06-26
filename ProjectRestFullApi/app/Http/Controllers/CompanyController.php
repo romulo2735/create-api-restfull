@@ -23,9 +23,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $jobs = $this->company->paginate();
+        $companies = $this->company->paginate();
 
-        return response()->json($jobs, Response::HTTP_OK);
+        return response()->json($companies, Response::HTTP_OK);
     }
 
     /**
