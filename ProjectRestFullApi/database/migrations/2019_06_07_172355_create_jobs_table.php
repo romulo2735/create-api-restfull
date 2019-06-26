@@ -20,7 +20,7 @@ class CreateJobsTable extends Migration
             $table->float('salary');
             $table->integer('hours')->unsigned();
             $table->integer('quantity')->unsigned();
-            $table->boolean('status');
+            $table->enum('status', ['active', 'disabled']);
             $table->integer('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
